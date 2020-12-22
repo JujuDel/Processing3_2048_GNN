@@ -1,8 +1,12 @@
 public class Grid {
+  Cell[][] cells;
   int loop = 0;
   boolean canSpawn = false;
+  int maxLoop = 10;
 
   public Grid() {
+    cells = new Cell[4][4];
+
     // Draws the boundary and lines of the grid
     rect(startCoor, startCoor, endCoor - startCoor, endCoor - startCoor);
     for (int i = startCoor; i <= endCoor; i += sizeCell) {
@@ -64,35 +68,35 @@ public class Grid {
   }
   
   // Moves the tiles based on arrow keys
-  public void moveTiles() {
-      if (loop < 10 && keyCode != 0) {
+  public void moveTilesKeyboard() {
+      if (loop < maxLoop && keyCode != 0) {
         for (Cell c : getOccupiedCells(false)) {
-          // checks if key and new position of tile is valid
+          // Checks if key and new position of tile is valid
           if (keyCode == UP && c.yCoor > startCoor && c.row != 0) {
-            // moves tile if cell above it has no numeric value
+            // Moves tile if cell above it has no numeric value
             if (!cells[c.row-1][c.col].hasNumber) {
               c.yCoor -= sizeCell;
-              // position of tile is changed when tile moves to another cell location
+              // Position of tile is changed when tile moves to another cell location
               if ((c.yCoor - startCoor) % sizeCell == 0) {
-                c.changeCell(c.row - 1, c.col);
+                c.changeCell(cells, c.row - 1, c.col);
               }
               canSpawn = true;
             }
-            // merges tile if tile above it has the same number
+            // Merges tile if tile above it has the same number
             else if ((c.yCoor - startCoor) % sizeCell == 0 && cells[c.row - 1][c.col].number == c.number && c.merge) {
               c.merge = false;
               cells[c.row - 1][c.col].merge = false;
               c.yCoor -= sizeCell;
               c.number *= 2;
               score += c.number;
-              c.changeCell(c.row - 1, c.col);
+              c.changeCell(cells, c.row - 1, c.col);
               canSpawn = true;
             }
           } else if (keyCode == LEFT && c.xCoor > startCoor && c.col !=0) {
             if (!cells[c.row][c.col - 1].hasNumber) {
               c.xCoor -= sizeCell;
               if ((c.xCoor - startCoor) % sizeCell == 0) {
-                c.changeCell(c.row, c.col - 1);
+                c.changeCell(cells, c.row, c.col - 1);
               }
               canSpawn = true;
             } else if ((c.xCoor - startCoor) % sizeCell == 0 && cells[c.row][c.col - 1].number == c.number && c.merge) {
@@ -101,14 +105,14 @@ public class Grid {
               c.xCoor -= sizeCell;
               c.number *= 2;
               score += c.number;
-              c.changeCell(c.row, c.col - 1);
+              c.changeCell(cells, c.row, c.col - 1);
               canSpawn = true;
             }
           } else if (keyCode == RIGHT && c.xCoor < endCoor && c.col != 3) {
             if (!cells[c.row][c.col + 1].hasNumber) {
               c.xCoor += sizeCell;
               if ((c.xCoor - startCoor) % sizeCell == 0) {
-                c.changeCell(c.row, c.col + 1);
+                c.changeCell(cells, c.row, c.col + 1);
               }
               canSpawn = true;
             } else if ((c.xCoor - startCoor) % sizeCell == 0 && cells[c.row][c.col + 1].number == c.number && c.merge) {
@@ -117,14 +121,14 @@ public class Grid {
               c.xCoor += sizeCell;
               c.number *= 2;
               score += c.number;
-              c.changeCell(c.row, c.col + 1);
+              c.changeCell(cells, c.row, c.col + 1);
               canSpawn = true;
             }
           } else if (keyCode == DOWN && c.yCoor < endCoor && c.row != 3) {
             if (!cells[c.row + 1][c.col].hasNumber) {
               c.yCoor += sizeCell;
               if ((c.yCoor - startCoor) % sizeCell == 0) {
-                c.changeCell(c.row + 1, c.col);
+                c.changeCell(cells, c.row + 1, c.col);
               }
               canSpawn = true;
             } else if ((c.yCoor - startCoor) % sizeCell == 0 && cells[c.row + 1][c.col].number == c.number && c.merge) {
@@ -133,13 +137,13 @@ public class Grid {
               c.yCoor += sizeCell;
               c.number *= 2;
               score += c.number;
-              c.changeCell(c.row + 1, c.col);
+              c.changeCell(cells, c.row + 1, c.col);
               canSpawn = true;
             }
           }
         }
       }
-      // resets loop, keyCode, cell's merge state, and spawns a tile
+      // Resets loop, keyCode, cell's merge state, and spawns a tile
       else {
         loop = -1;
         keyCode = 0;

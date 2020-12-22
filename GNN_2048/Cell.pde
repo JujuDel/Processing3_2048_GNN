@@ -14,7 +14,7 @@ public class Cell {
   }
 
   // Updates the position of a cell when cell is moving
-  public void changeCell(int r, int c) {
+  public void changeCell(Cell[][] cells, int r, int c) {
     cells[r][c].merge = merge;
     hasNumber = false;
     if (row == r) {

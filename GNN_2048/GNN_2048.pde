@@ -1,11 +1,21 @@
-Cell[][] cells;
+// 2048 container
 Grid grid;
 
+// 2048 display
 int startCoor = 100;
 int endCoor = 700;
 int sizeCell = (endCoor - startCoor) / 4;
   
+// Player score
 static int score;
+
+// NN sizes
+int nbInputs = 16;
+int nbOutputs = 4;
+int [] hiddens;
+
+// 1 NN
+MyDFF myDFF;
 
 void setup() {
   size(800, 800);
@@ -13,11 +23,16 @@ void setup() {
   textSize(30);
   fill(255, 0, 0);
   text("Press 'r' to reset game", 150, 560);
-  cells = new Cell[4][4];
   grid = new Grid();
   score = 0;
   grid.spawn();
   grid.spawn();
+
+  // Set the number of hidden layers and the number of neurons per layers
+  hiddens = new int[1];
+  hiddens[0] = 16 * 5;
+
+  myDFF = new MyDFF(nbInputs, hiddens, nbOutputs);
 }
 
 void draw() {
@@ -44,13 +59,28 @@ void draw() {
 
   // Moves tiles when arrow key is pressed and grid is not full
   if (grid.getOccupiedCells(true).size() <= 16 && (keyCode == UP || keyCode == DOWN || keyCode == LEFT || keyCode == RIGHT)) {
-    grid.moveTiles();
+    grid.moveTilesKeyboard();
   }
 }
 
 // Resets game is r is pressed
 void keyPressed() {
-  if (key == 'r') {
+  if (key == 'r' || key == 'R') {
     setup();
+  }
+  else if (key == 'f' || key == 'F') {
+    double inputs[] = new double[16];
+    for (int j = 0; j < 4; j++) {
+      for (int i = 0; i < 4; i++) {
+        if (grid.cells[j][i].hasNumber) {
+          // Each number is 2^i with i : 1 -> 17
+          // log(number) / (17 * log(2)) is equivalent to i / 17
+          inputs[4 * j + i] = log(grid.cells[j][i].number) / (17 * log(2));
+        } else {
+          inputs[4 * j + i] = 0;
+        }
+      }
+    }
+    println("FORWARD DONE", myDFF.forward(inputs));
   }
 }
