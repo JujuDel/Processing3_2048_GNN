@@ -58,4 +58,28 @@ class Network {
     
     return foundedLabel;
   }
+
+  //// Vizu methods
+
+  void blank() {
+    m_input_layer.blank();
+
+    for (int i = 0; i < m_hidden_layer.length; ++i) {
+      m_hidden_layer[i].blank();
+    }
+
+    m_output_layer.blank();
+  }
+
+  void display(int res) {
+
+    m_input_layer.displayInput(10+16, 30, 8, 28);
+
+    int nbExtraRow = 0;
+    for (int i = 0; i < m_hidden_layer.length; ++i) {
+      nbExtraRow += m_hidden_layer[i].displayHidden(260 + (i + nbExtraRow)*21, 30, 16, 13);
+    }
+
+    m_output_layer.displayOutput(720, 48, 16, res);
+  }
 }

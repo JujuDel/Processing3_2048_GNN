@@ -17,4 +17,14 @@ class MyDFF {
     }
     return -1;
   }
+
+  //// Vizu methods
+
+  void blank() {
+    _network.blank();
+  }
+
+  void display(int res) {
+    _network.display(res);
+  }
 }

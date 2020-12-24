@@ -44,4 +44,11 @@ class Neuron {
     }
     m_bias += delta * learningRateB;
   }
+
+  //// Vizu methods
+
+  void display(int size) {
+    fill((int)(255 * (1 - m_output)));
+    ellipse(0, 0, size, size);
+  }
 }
