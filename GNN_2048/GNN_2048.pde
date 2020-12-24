@@ -69,18 +69,6 @@ void keyPressed() {
     setup();
   }
   else if (key == 'f' || key == 'F') {
-    double inputs[] = new double[16];
-    for (int j = 0; j < 4; j++) {
-      for (int i = 0; i < 4; i++) {
-        if (grid.cells[j][i].hasNumber) {
-          // Each number is 2^i with i : 1 -> 17
-          // log(number) / (17 * log(2)) is equivalent to i / 17
-          inputs[4 * j + i] = log(grid.cells[j][i].number) / (17 * log(2));
-        } else {
-          inputs[4 * j + i] = 0;
-        }
-      }
-    }
-    println("FORWARD DONE", myDFF.forward(inputs));
+    println("FORWARD DONE", myDFF.respond(grid));
   }
 }

@@ -8,7 +8,7 @@ class MyDFF {
     _network = new Network(nbInputs, nbHiddens, nbOutput);
   }
   
-  int forward(double[] inputs) {
+  int respond(double[] inputs) {
     if (inputs.length == _network.m_input_layer.neurons.length) {
       _network.respond(inputs);
       return _network.findIndexBestOutput();
@@ -16,6 +16,24 @@ class MyDFF {
       println("MyDFF::respond(double[]) method -> invalid size of the argument");
     }
     return -1;
+  }
+
+  //// 2048 input methods
+
+  int respond(Grid grid) {
+    double inputs[] = new double[16];
+    for (int j = 0; j < 4; j++) {
+      for (int i = 0; i < 4; i++) {
+        if (grid.cells[j][i].hasNumber) {
+          // Each number is 2^i with i : 1 -> 17
+          // log(number) / (17 * log(2)) is equivalent to i / 17
+          inputs[4 * j + i] = log(grid.cells[j][i].number) / (17 * log(2));
+        } else {
+          inputs[4 * j + i] = 0;
+        }
+      }
+    }
+    return respond(inputs);
   }
 
   //// Vizu methods
