@@ -18,6 +18,10 @@ class MyDFF {
     return -1;
   }
 
+  int findIndexBestOutput() {
+    return _network.findIndexBestOutput();
+  }
+
   //// 2048 input methods
 
   int respond(Grid grid) {

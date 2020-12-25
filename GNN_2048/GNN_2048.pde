@@ -1,12 +1,9 @@
 // 2048 container
-Grid grid;
 int startCoor = 100;
 int endCoor = 700;
 int sizeCell = (endCoor - startCoor) / 4;
 
-// 1 NN
-MyDFF myDFF;
-// Set the number of hidden layers and the number of neurons per layers
+// Number of hidden layers and the number of neurons per layers
 int hiddens[];
 
 // Genetic population
@@ -21,7 +18,6 @@ void setup() {
   textSize(30);
   fill(255, 0, 0);
   text("Press 'r' to reset game", 150, 560);
-  grid = new Grid();
 
   DIRECTION[0] = "UP";
   DIRECTION[1] = "RIGHT";
@@ -32,10 +28,8 @@ void setup() {
   hiddens = new int[1];
   hiddens[0] = 16 * 5;
 
-  myDFF = new MyDFF(16, hiddens, 4);
-  myDFF.display(myDFF.respond(grid));
-
   population = new Population(100);
+  population.respond();
 }
 
 void draw() {
@@ -53,16 +47,16 @@ void draw() {
   rect(430, 20, 130, 30);
   fill(0);
   textSize(25);
-  text("Score: " + grid.score, 350, 45);
+  text("Score: " + population.grids[0].score, 350, 45);
 
   // Draws the cells that have a numeric value
-  for (Cell c : grid.getOccupiedCells (true)) {
+  for (Cell c : population.grids[0].getOccupiedCells (true)) {
     c.drawTile();
   }
 
   // Moves tiles when arrow key is pressed and grid is not full
-  if (grid.getOccupiedCells(true).size() <= 16 && (keyCode == UP || keyCode == DOWN || keyCode == LEFT || keyCode == RIGHT)) {
-    grid.moveTilesKeyboard();
+  if (population.grids[0].getOccupiedCells(true).size() <= 16 && (keyCode == UP || keyCode == DOWN || keyCode == LEFT || keyCode == RIGHT)) {
+    population.grids[0].moveTilesKeyboard();
   }
 }
 
@@ -73,6 +67,6 @@ void keyPressed() {
   }
   else if (key == 'f' || key == 'F') {
     background(255);
-    myDFF.display(myDFF.respond(grid));
+    population.respond();
   }
 }

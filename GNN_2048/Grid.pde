@@ -155,7 +155,7 @@ public class Grid {
           c.merge = true;
         }
         if (getOccupiedCells(false).size() < 16 && canSpawn) {
-          grid.spawn();
+          spawn();
         }
         canSpawn = false;
       }
@@ -184,7 +184,7 @@ public class Grid {
   public boolean checkLose() {
     for (int r = 0; r<cells.length; r++) {
       for (int c = 0; c<cells[0].length; c++) {
-        if (!grid.checkLoseHelper(r, c)) {
+        if (!checkLoseHelper(r, c)) {
           return false;
         }
       }

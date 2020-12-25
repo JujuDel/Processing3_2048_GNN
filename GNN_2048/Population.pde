@@ -6,12 +6,17 @@ class Population {
   Population(int sizePopulation) {
     NNs = new MyDFF[sizePopulation];
     grids = new Grid[sizePopulation];
-  }
-  
-  void init() {
+
     for (int i = 0; i < NNs.length; i++) {
       NNs[i] = new MyDFF(16, hiddens, 4);
       grids[i] = new Grid();
     }
+  }
+
+  void respond() {
+    for (int i = 0; i < NNs.length; i++) {
+      NNs[i].respond(grids[i]);
+    }
+    NNs[0].display(NNs[0].findIndexBestOutput());
   }
 }
