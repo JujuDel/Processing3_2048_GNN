@@ -42,31 +42,32 @@ class Layer {
     }
   }
 
-  void displayInput(int xStart, int yStart, int sizeNeuron, int nbNeurons) {
+  void displayInput(int xStart, int yStart, int sizeNeuron, int nbNeuronsPerRow) {
     for (int i = 0; i < neurons.length; ++i) {
       pushMatrix();
         translate(
-          (i%nbNeurons) * sizeNeuron + xStart,
-          (i/nbNeurons) * sizeNeuron + yStart);
+          (i%nbNeuronsPerRow) * sizeNeuron + xStart,
+          (i/nbNeuronsPerRow) * sizeNeuron + yStart);
         neurons[i].display(sizeNeuron);
       popMatrix();
     }
   }
 
-  int displayHidden(int xStart, int yStart, int sizeNeuron, int nbNeurons) {
+  int displayHidden(int xStart, int yStart, int sizeNeuron, int nbNeuronsPerCol) {
     for (int i = 0; i < neurons.length; ++i) {
       pushMatrix();
         translate(
-          (i/nbNeurons) * (sizeNeuron + 2) + xStart,
-          (i%nbNeurons) * (sizeNeuron + 2) + yStart);
+          (i/nbNeuronsPerCol) * (sizeNeuron + 2) + xStart,
+          (i%nbNeuronsPerCol) * (sizeNeuron + 2) + yStart);
         neurons[i].display(sizeNeuron);
       popMatrix();
     }
-    return (neurons.length - 1) / nbNeurons;
+    return (neurons.length - 1) / nbNeuronsPerCol;
   }
 
   void displayOutput(int xStart, int yStart, int sizeNeuron, int res)
   {
+    textSize(25);
     for (int i = 0; i < neurons.length; ++i) {
       pushMatrix();
         translate(
@@ -78,7 +79,8 @@ class Layer {
           fill(0,200,0);
         else
           fill(100);
-        text(i + ": " + nf((float)neurons[i].m_output, 0, 4), 16, 6);
+        text(" " + DIRECTION[i], 16, 6);
+        text(nf((float)neurons[i].m_output, 0, 4), 120, 6);
       popMatrix();
     }
   }

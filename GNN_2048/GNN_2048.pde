@@ -1,7 +1,5 @@
 // 2048 container
 Grid grid;
-
-// 2048 display
 int startCoor = 100;
 int endCoor = 700;
 int sizeCell = (endCoor - startCoor) / 4;
@@ -9,16 +7,14 @@ int sizeCell = (endCoor - startCoor) / 4;
 // Player score
 static int score;
 
-// NN sizes
-int nbInputs = 16;
-int nbOutputs = 4;
-int [] hiddens;
-
 // 1 NN
 MyDFF myDFF;
 
+// Directions
+String DIRECTION[] = new String[4];
+
 void setup() {
-  size(800, 800);
+  size(1500, 800);
   background(255);
   textSize(30);
   fill(255, 0, 0);
@@ -28,11 +24,17 @@ void setup() {
   grid.spawn();
   grid.spawn();
 
+  DIRECTION[0] = "UP";
+  DIRECTION[1] = "RIGHT";
+  DIRECTION[2] = "DOWN";
+  DIRECTION[3] = "LEFT";
+
   // Set the number of hidden layers and the number of neurons per layers
-  hiddens = new int[1];
+  int hiddens[] = new int[1];
   hiddens[0] = 16 * 5;
 
-  myDFF = new MyDFF(nbInputs, hiddens, nbOutputs);
+  myDFF = new MyDFF(16, hiddens, 4);
+  myDFF.display(myDFF.respond(grid));
 }
 
 void draw() {
@@ -69,6 +71,7 @@ void keyPressed() {
     setup();
   }
   else if (key == 'f' || key == 'F') {
-    println("FORWARD DONE", myDFF.respond(grid));
+    background(255);
+    myDFF.display(myDFF.respond(grid));
   }
 }
