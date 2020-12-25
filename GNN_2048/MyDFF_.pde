@@ -47,6 +47,7 @@ class MyDFF {
   }
 
   void display(int res) {
+    strokeWeight(2);
     _network.display(res);
   }
 }

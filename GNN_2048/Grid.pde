@@ -73,95 +73,177 @@ public class Grid {
   
   // Moves the tiles based on arrow keys
   public void moveTilesKeyboard() {
-      if (loop < maxLoop && keyCode != 0) {
-        for (Cell c : getOccupiedCells(false)) {
-          // Checks if key and new position of tile is valid
-          if (keyCode == UP && c.yCoor > startCoor && c.row != 0) {
-            // Moves tile if cell above it has no numeric value
-            if (!cells[c.row-1][c.col].hasNumber) {
-              c.yCoor -= sizeCell;
-              // Position of tile is changed when tile moves to another cell location
-              if ((c.yCoor - startCoor) % sizeCell == 0) {
-                c.changeCell(cells, c.row - 1, c.col);
-              }
-              canSpawn = true;
-            }
-            // Merges tile if tile above it has the same number
-            else if ((c.yCoor - startCoor) % sizeCell == 0 && cells[c.row - 1][c.col].number == c.number && c.merge) {
-              c.merge = false;
-              cells[c.row - 1][c.col].merge = false;
-              c.yCoor -= sizeCell;
-              c.number *= 2;
-              score += c.number;
+    if (loop < maxLoop && keyCode != 0) {
+      for (Cell c : getOccupiedCells(false)) {
+        // Checks if key and new position of tile is valid
+        if (keyCode == UP && c.yCoor > startCoor && c.row != 0) {
+          // Moves tile if cell above it has no numeric value
+          if (!cells[c.row-1][c.col].hasNumber) {
+            c.yCoor -= sizeCell;
+            // Position of tile is changed when tile moves to another cell location
+            if ((c.yCoor - startCoor) % sizeCell == 0) {
               c.changeCell(cells, c.row - 1, c.col);
-              canSpawn = true;
             }
-          } else if (keyCode == LEFT && c.xCoor > startCoor && c.col !=0) {
-            if (!cells[c.row][c.col - 1].hasNumber) {
-              c.xCoor -= sizeCell;
-              if ((c.xCoor - startCoor) % sizeCell == 0) {
-                c.changeCell(cells, c.row, c.col - 1);
-              }
-              canSpawn = true;
-            } else if ((c.xCoor - startCoor) % sizeCell == 0 && cells[c.row][c.col - 1].number == c.number && c.merge) {
-              c.merge = false;
-              cells[c.row][c.col - 1].merge = false;
-              c.xCoor -= sizeCell;
-              c.number *= 2;
-              score += c.number;
+            canSpawn = true;
+          }
+          // Merges tile if tile above it has the same number
+          else if ((c.yCoor - startCoor) % sizeCell == 0 && cells[c.row - 1][c.col].number == c.number && c.merge) {
+            c.merge = false;
+            cells[c.row - 1][c.col].merge = false;
+            c.yCoor -= sizeCell;
+            c.number *= 2;
+            score += c.number;
+            c.changeCell(cells, c.row - 1, c.col);
+            canSpawn = true;
+          }
+        } else if (keyCode == LEFT && c.xCoor > startCoor && c.col !=0) {
+          if (!cells[c.row][c.col - 1].hasNumber) {
+            c.xCoor -= sizeCell;
+            if ((c.xCoor - startCoor) % sizeCell == 0) {
               c.changeCell(cells, c.row, c.col - 1);
-              canSpawn = true;
             }
-          } else if (keyCode == RIGHT && c.xCoor < endCoor && c.col != 3) {
-            if (!cells[c.row][c.col + 1].hasNumber) {
-              c.xCoor += sizeCell;
-              if ((c.xCoor - startCoor) % sizeCell == 0) {
-                c.changeCell(cells, c.row, c.col + 1);
-              }
-              canSpawn = true;
-            } else if ((c.xCoor - startCoor) % sizeCell == 0 && cells[c.row][c.col + 1].number == c.number && c.merge) {
-              c.merge = false;
-              cells[c.row][c.col + 1].merge = false;
-              c.xCoor += sizeCell;
-              c.number *= 2;
-              score += c.number;
+            canSpawn = true;
+          } else if ((c.xCoor - startCoor) % sizeCell == 0 && cells[c.row][c.col - 1].number == c.number && c.merge) {
+            c.merge = false;
+            cells[c.row][c.col - 1].merge = false;
+            c.xCoor -= sizeCell;
+            c.number *= 2;
+            score += c.number;
+            c.changeCell(cells, c.row, c.col - 1);
+            canSpawn = true;
+          }
+        } else if (keyCode == RIGHT && c.xCoor < endCoor && c.col != 3) {
+          if (!cells[c.row][c.col + 1].hasNumber) {
+            c.xCoor += sizeCell;
+            if ((c.xCoor - startCoor) % sizeCell == 0) {
               c.changeCell(cells, c.row, c.col + 1);
-              canSpawn = true;
             }
-          } else if (keyCode == DOWN && c.yCoor < endCoor && c.row != 3) {
-            if (!cells[c.row + 1][c.col].hasNumber) {
-              c.yCoor += sizeCell;
-              if ((c.yCoor - startCoor) % sizeCell == 0) {
-                c.changeCell(cells, c.row + 1, c.col);
-              }
-              canSpawn = true;
-            } else if ((c.yCoor - startCoor) % sizeCell == 0 && cells[c.row + 1][c.col].number == c.number && c.merge) {
-              c.merge = false;
-              cells[c.row + 1][c.col].merge = false;
-              c.yCoor += sizeCell;
-              c.number *= 2;
-              score += c.number;
+            canSpawn = true;
+          } else if ((c.xCoor - startCoor) % sizeCell == 0 && cells[c.row][c.col + 1].number == c.number && c.merge) {
+            c.merge = false;
+            cells[c.row][c.col + 1].merge = false;
+            c.xCoor += sizeCell;
+            c.number *= 2;
+            score += c.number;
+            c.changeCell(cells, c.row, c.col + 1);
+            canSpawn = true;
+          }
+        } else if (keyCode == DOWN && c.yCoor < endCoor && c.row != 3) {
+          if (!cells[c.row + 1][c.col].hasNumber) {
+            c.yCoor += sizeCell;
+            if ((c.yCoor - startCoor) % sizeCell == 0) {
               c.changeCell(cells, c.row + 1, c.col);
-              canSpawn = true;
             }
+            canSpawn = true;
+          } else if ((c.yCoor - startCoor) % sizeCell == 0 && cells[c.row + 1][c.col].number == c.number && c.merge) {
+            c.merge = false;
+            cells[c.row + 1][c.col].merge = false;
+            c.yCoor += sizeCell;
+            c.number *= 2;
+            score += c.number;
+            c.changeCell(cells, c.row + 1, c.col);
+            canSpawn = true;
           }
         }
       }
-      // Resets loop, keyCode, cell's merge state, and spawns a tile
-      else {
-        loop = -1;
-        keyCode = 0;
-        for (Cell c : getOccupiedCells(false)) {
-          c.merge = true;
-        }
-        if (getOccupiedCells(false).size() < 16 && canSpawn) {
-          spawn();
-        }
-        canSpawn = false;
-      }
-      loop++;
     }
+    // Resets loop, keyCode, cell's merge state, and spawns a tile
+    else {
+      loop = -1;
+      keyCode = 0;
+      for (Cell c : getOccupiedCells(false)) {
+        c.merge = true;
+      }
+      if (getOccupiedCells(false).size() < 16 && canSpawn) {
+        spawn();
+      }
+      canSpawn = false;
+    }
+    loop++;
+  }
 
+  public void moveTilesNN(String direction) {
+    for (int repeat = 0; repeat < 4; repeat++) {
+      for (Cell c : getOccupiedCells(false)) {
+        if (direction == "UP" && c.yCoor > startCoor && c.row != 0) {
+          // Moves tile if cell above it has no numeric value
+          if (!cells[c.row - 1][c.col].hasNumber) {
+            c.yCoor -= sizeCell;
+            c.changeCell(cells, c.row - 1, c.col);
+            canSpawn = true;
+          }
+          // Merges tile if tile above it has the same number
+          else if ((c.yCoor - startCoor) % sizeCell == 0 && cells[c.row - 1][c.col].number == c.number && c.merge) {
+            c.merge = false;
+            cells[c.row - 1][c.col].merge = false;
+            c.yCoor -= sizeCell;
+            c.number *= 2;
+            score += c.number;
+            c.changeCell(cells, c.row - 1, c.col);
+            canSpawn = true;
+          }
+        } else if (direction == "LEFT" && c.xCoor > startCoor && c.col !=0) {
+          // Moves tile if cell on the left has no numeric value
+          if (!cells[c.row][c.col - 1].hasNumber) {
+            c.xCoor -= sizeCell;
+            c.changeCell(cells, c.row, c.col - 1);
+            canSpawn = true;
+          }
+          // Merges tile if tile on the left has the same number
+          else if ((c.xCoor - startCoor) % sizeCell == 0 && cells[c.row][c.col - 1].number == c.number && c.merge) {
+            c.merge = false;
+            cells[c.row][c.col - 1].merge = false;
+            c.xCoor -= sizeCell;
+            c.number *= 2;
+            score += c.number;
+            c.changeCell(cells, c.row, c.col - 1);
+            canSpawn = true;
+          }
+        } else if (direction == "RIGHT" && c.xCoor < endCoor && c.col != 3) {
+          // Moves tile if cell on the right has no numeric value
+          if (!cells[c.row][c.col + 1].hasNumber) {
+            c.xCoor += sizeCell;
+            c.changeCell(cells, c.row, c.col + 1);
+            canSpawn = true;
+          }
+          // Merges tile if tile on the right has the same number
+          else if ((c.xCoor - startCoor) % sizeCell == 0 && cells[c.row][c.col + 1].number == c.number && c.merge) {
+            c.merge = false;
+            cells[c.row][c.col + 1].merge = false;
+            c.xCoor += sizeCell;
+            c.number *= 2;
+            score += c.number;
+            c.changeCell(cells, c.row, c.col + 1);
+            canSpawn = true;
+          }
+        } else if (direction == "DOWN" && c.yCoor < endCoor && c.row != 3) {
+          // Moves tile if cell under it has no numeric value
+          if (!cells[c.row + 1][c.col].hasNumber) {
+            c.yCoor += sizeCell;
+            c.changeCell(cells, c.row + 1, c.col);
+            canSpawn = true;
+          }
+          // Merges tile if tile under it has the same number
+          else if ((c.yCoor - startCoor) % sizeCell == 0 && cells[c.row + 1][c.col].number == c.number && c.merge) {
+            c.merge = false;
+            cells[c.row + 1][c.col].merge = false;
+            c.yCoor += sizeCell;
+            c.number *= 2;
+            score += c.number;
+            c.changeCell(cells, c.row + 1, c.col);
+            canSpawn = true;
+          }
+        }
+      }
+    }
+    for (Cell c : getOccupiedCells(false)) {
+      c.merge = true;
+    }
+    if (getOccupiedCells(false).size() < 16 && canSpawn) {
+      spawn();
+    }
+    canSpawn = false;
+  }
 
   // Checks if cell can still merge/move
   public boolean checkLoseHelper(int rp, int cp) {
