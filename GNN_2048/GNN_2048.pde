@@ -3,12 +3,14 @@ Grid grid;
 int startCoor = 100;
 int endCoor = 700;
 int sizeCell = (endCoor - startCoor) / 4;
-  
-// Player score
-static int score;
 
 // 1 NN
 MyDFF myDFF;
+// Set the number of hidden layers and the number of neurons per layers
+int hiddens[];
+
+// Genetic population
+Population population;
 
 // Directions
 String DIRECTION[] = new String[4];
@@ -20,9 +22,6 @@ void setup() {
   fill(255, 0, 0);
   text("Press 'r' to reset game", 150, 560);
   grid = new Grid();
-  score = 0;
-  grid.spawn();
-  grid.spawn();
 
   DIRECTION[0] = "UP";
   DIRECTION[1] = "RIGHT";
@@ -30,11 +29,13 @@ void setup() {
   DIRECTION[3] = "LEFT";
 
   // Set the number of hidden layers and the number of neurons per layers
-  int hiddens[] = new int[1];
+  hiddens = new int[1];
   hiddens[0] = 16 * 5;
 
   myDFF = new MyDFF(16, hiddens, 4);
   myDFF.display(myDFF.respond(grid));
+
+  population = new Population(100);
 }
 
 void draw() {
@@ -52,7 +53,7 @@ void draw() {
   rect(430, 20, 130, 30);
   fill(0);
   textSize(25);
-  text("Score: " + score, 350, 45);
+  text("Score: " + grid.score, 350, 45);
 
   // Draws the cells that have a numeric value
   for (Cell c : grid.getOccupiedCells (true)) {

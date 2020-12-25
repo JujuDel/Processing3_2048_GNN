@@ -3,6 +3,7 @@ public class Grid {
   int loop = 0;
   boolean canSpawn = false;
   int maxLoop = 10;
+  int score = 0;
 
   public Grid() {
     cells = new Cell[4][4];
@@ -26,6 +27,9 @@ public class Grid {
       y += sizeCell;
       x = startCoor;
     }
+
+    spawn();
+    spawn();
   }
 
   
