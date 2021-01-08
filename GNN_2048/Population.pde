@@ -16,13 +16,15 @@ class Population {
     }
   }
 
-  void respond() {
+  void update() {
     for (int i = 0; i < NNs.length; i++) {
       if (isAlive[i]) {
+        // Run the NN
         NNs[i].respond(grids[i]);
+        // Apply the NN output to the grid
+        isAlive[i] = grids[i].moveTilesNN(DIRECTION[NNs[i].findIndexBestOutput()]);
       }
     }
-    NNs[0].display(NNs[0].findIndexBestOutput());
   }
 
   void blank() {
@@ -49,7 +51,4 @@ class Population {
     // TODO
   }
 
-  void update() {
-    // TODO
-  }
 }

@@ -60,11 +60,16 @@ void draw() {
       population.computeFitness();
       // Perform the mutation
       population.mutate();
+      // TEMPORARY: start over
+      setup();
     }
     else
     {
-      // Do 1 more step
+      // Do one step
       population.update();
+      // Display the first NN
+      background(255);
+      population.NNs[0].display(population.NNs[0].findIndexBestOutput());
     }
   }
   // User is controlling the game
@@ -89,7 +94,7 @@ void keyPressed() {
   // 'F' -> Execute 1 feed forward
   else if (!isGeneticOngoing && (key == 'f' || key == 'F')) {
     background(255);
-    population.respond();
+    population.NNs[0].respond(population.grids[0]);
     if (!population.grids[0].moveTilesNN(DIRECTION[population.NNs[0].findIndexBestOutput()])) {
       setup();
     }
