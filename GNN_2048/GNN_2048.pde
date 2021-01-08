@@ -67,6 +67,8 @@ void keyPressed() {
   else if (key == 'f' || key == 'F') {
     background(255);
     population.respond();
-    population.grids[0].moveTilesNN(DIRECTION[population.NNs[0].findIndexBestOutput()]);
+    if (!population.grids[0].moveTilesNN(DIRECTION[population.NNs[0].findIndexBestOutput()])) {
+      setup();
+    }
   }
 }

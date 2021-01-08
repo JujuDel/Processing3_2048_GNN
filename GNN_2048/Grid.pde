@@ -162,7 +162,7 @@ public class Grid {
     loop++;
   }
 
-  public void moveTilesNN(String direction) {
+  public boolean moveTilesNN(String direction) {
     for (int repeat = 0; repeat < 4; repeat++) {
       for (Cell c : getOccupiedCells(false)) {
         if (direction == "UP" && c.yCoor > startCoor && c.row != 0) {
@@ -241,8 +241,13 @@ public class Grid {
     }
     if (getOccupiedCells(false).size() < 16 && canSpawn) {
       spawn();
+      canSpawn = false;
+      return true;
     }
-    canSpawn = false;
+    else {
+      canSpawn = false;
+      return false;
+    }
   }
 
   // Checks if cell can still merge/move
