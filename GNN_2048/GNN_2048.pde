@@ -12,6 +12,9 @@ Population population;
 // Directions
 String DIRECTION[] = new String[4];
 
+// Whether or not the genetic is ongoing
+boolean isGeneticOngoing = false;
+
 void setup() {
   size(1500, 800);
   background(255);
@@ -48,27 +51,51 @@ void draw() {
   textSize(25);
   text("Score: " + population.grids[0].score, 350, 45);
 
+  // Genetic algorithm
+  if (isGeneticOngoing) {
+    // All the NN are finished
+    if (population.allNNStoped())
+    {
+      // Compute their fitness
+      population.computeFitness();
+      // Perform the mutation
+      population.mutate();
+    }
+    else
+    {
+      // Do 1 more step
+      population.update();
+    }
+  }
+  // User is controlling the game
+  else {
+    // Moves tiles when arrow key is pressed and grid is not full
+    if (population.grids[0].getOccupiedCells(true).size() <= 16 && (keyCode == UP || keyCode == DOWN || keyCode == LEFT || keyCode == RIGHT)) {
+      population.grids[0].moveTilesKeyboard();
+    }
+  }
+
   // Draws the cells that have a numeric value
   for (Cell c : population.grids[0].getOccupiedCells (true)) {
     c.drawTile();
   }
-
-  // Moves tiles when arrow key is pressed and grid is not full
-  if (population.grids[0].getOccupiedCells(true).size() <= 16 && (keyCode == UP || keyCode == DOWN || keyCode == LEFT || keyCode == RIGHT)) {
-    population.grids[0].moveTilesKeyboard();
-  }
 }
 
-// Resets game is r is pressed
 void keyPressed() {
-  if (key == 'r' || key == 'R') {
+  // 'R' -> Resets the game
+  if (!isGeneticOngoing && (key == 'r' || key == 'R')) {
     setup();
   }
-  else if (key == 'f' || key == 'F') {
+  // 'F' -> Execute 1 feed forward
+  else if (!isGeneticOngoing && (key == 'f' || key == 'F')) {
     background(255);
     population.respond();
     if (!population.grids[0].moveTilesNN(DIRECTION[population.NNs[0].findIndexBestOutput()])) {
       setup();
     }
+  }
+  // 'SPACE BAR' -> Starts or stops the genetic
+  else if (key == ' ') {
+    isGeneticOngoing = !isGeneticOngoing;
   }
 }

@@ -26,4 +26,21 @@ class Population {
     }
     NNs[0].display();
   }
+
+  boolean allNNStoped() {
+    // TODO
+    return false;
+  }
+
+  void computeFitness() {
+    // TODO
+  }
+
+  void mutate() {
+    // TODO
+  }
+
+  void update() {
+    // TODO
+  }
 }
