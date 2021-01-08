@@ -34,8 +34,8 @@ void setup() {
   population.blank();
 }
 
-void draw() {
-  // Redraws the grid
+void redrawGrid() {
+  background(255);
   fill(205, 193, 197);
   rect(startCoor, startCoor, endCoor - startCoor, endCoor - startCoor);
   for (int i = startCoor; i <= endCoor; i += sizeCell) {
@@ -50,6 +50,10 @@ void draw() {
   fill(0);
   textSize(25);
   text("Score: " + population.grids[0].score, 350, 45);
+}
+
+void draw() {
+  redrawGrid();
 
   // Genetic algorithm
   if (isGeneticOngoing) {
@@ -66,8 +70,7 @@ void draw() {
       // Do one step
       population.update();
       // Display the first NN
-      background(255);
-      population.NNs[0].display(population.NNs[0].findIndexBestOutput());
+      redrawGrid();
     }
   }
   // User is controlling the game
@@ -77,6 +80,7 @@ void draw() {
       population.grids[0].moveTilesKeyboard();
     }
   }
+  population.NNs[0].display(population.NNs[0].findIndexBestOutput());
 
   // Draws the cells that have a numeric value
   for (Cell c : population.grids[0].getOccupiedCells (true)) {
@@ -91,7 +95,7 @@ void keyPressed() {
   }
   // 'F' -> Execute 1 feed forward
   else if (!isGeneticOngoing && (key == 'f' || key == 'F')) {
-    background(255);
+    redrawGrid();
     population.NNs[0].respond(population.grids[0]);
     population.NNs[0].display(population.NNs[0].findIndexBestOutput());
     if (!population.grids[0].moveTilesNN(DIRECTION[population.NNs[0].findIndexBestOutput()])) {
