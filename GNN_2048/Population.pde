@@ -63,5 +63,42 @@ class Population {
     for (int i = grids.length - 1; i >= 0; i--) {
       grids[i].fitness = cumSum + grids[i].score / fitnessSum;
     }
+
+    // Next generation array
+    MyDFF[] newNNs = new MyDFF[_SIZE_POPULATION];
+
+    // Elitism
+    for (int i = 0; i < _ELITISM_IDX; ++i) {
+      newNNs[i] = NNs[grids[i].idx];
+    }
+
+    // Continuous Genetic mutation
+    for (int i = _ELITISM_IDX; i < _SIZE_POPULATION; i += 2) {
+      int idxParent1 = _SIZE_POPULATION;
+      while (idxParent1 == _SIZE_POPULATION) {
+        idxParent1 = 1;
+        float choice1 = random(999999) / 999999;
+        for (; idxParent1 < _SIZE_POPULATION; ++idxParent1) {
+          if (grids[idxParent1].fitness < choice1) {
+            idxParent1--;
+            break;
+          }
+        }
+      }
+      int idxParent2 = _SIZE_POPULATION;
+      while (idxParent2 == idxParent1 || idxParent2 == _SIZE_POPULATION) {
+        idxParent2 = 1;
+        float choice2 = random(999999) / 999999;
+        for (; idxParent2 < _SIZE_POPULATION; ++idxParent2) {
+          if (grids[idxParent2].fitness < choice2) {
+            idxParent2--;
+            break;
+          }
+        }
+      }
+    }
+
+    // Resulting NNs
+    NNs = newNNs.clone();
   }
 }
