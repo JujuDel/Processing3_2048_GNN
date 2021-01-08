@@ -70,7 +70,12 @@ public class Grid implements Comparable<Grid>, Cloneable{
       int c = (int)random(0, 4);
       if (!cells[r][c].hasNumber) {
         cells[r][c].hasNumber = true;
-        cells[r][c].number *= (int)random(0, 2) + 1;
+        if ((int)random(10) == 1) {
+          cells[r][c].number = 4;
+        }
+        else {
+          cells[r][c].number = 2;
+        }
         i++;
       }
     }
