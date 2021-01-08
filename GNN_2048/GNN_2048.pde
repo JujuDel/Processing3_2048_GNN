@@ -30,7 +30,7 @@ void setup() {
   hiddens = new int[1];
   hiddens[0] = 16 * 5;
 
-  population = new Population(100);
+  population = new Population();
   population.blank();
 }
 
@@ -56,8 +56,6 @@ void draw() {
     // All the NN are finished
     if (population.allNNStoped())
     {
-      // Compute their fitness
-      population.computeFitness();
       // Perform the mutation
       population.mutate();
       // TEMPORARY: start over
@@ -95,6 +93,7 @@ void keyPressed() {
   else if (!isGeneticOngoing && (key == 'f' || key == 'F')) {
     background(255);
     population.NNs[0].respond(population.grids[0]);
+    population.NNs[0].display(population.NNs[0].findIndexBestOutput());
     if (!population.grids[0].moveTilesNN(DIRECTION[population.NNs[0].findIndexBestOutput()])) {
       setup();
     }

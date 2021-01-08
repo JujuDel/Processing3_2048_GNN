@@ -1,11 +1,14 @@
-public class Grid {
+public class Grid implements Comparable<Grid>, Cloneable{
   Cell[][] cells;
   int loop = 0;
   boolean canSpawn = false;
   int maxLoop = 10;
-  int score = 0;
 
-  public Grid() {
+  int score = 0;
+  int idx;
+  float fitness;
+
+  public Grid(int idxNN) {
     cells = new Cell[4][4];
 
     // Draws the boundary and lines of the grid
@@ -30,6 +33,8 @@ public class Grid {
 
     spawn();
     spawn();
+
+    idx = idxNN;
   }
 
   
@@ -277,5 +282,27 @@ public class Grid {
       }
     }
     return true;
+  }
+
+  @Override int compareTo(final Grid g) {
+    //return score - g.score; // Ascending
+    return g.score - score; // Descending
+  }
+
+  @Override int hashCode() {
+    return idx;
+  }
+
+  @Override boolean equals(final Object o) {
+    return o.hashCode() == hashCode();
+  }
+
+  @Override Grid clone() {
+    try {
+      return (Grid) super.clone();
+    }
+    catch (final CloneNotSupportedException cause) {
+      throw new RuntimeException(cause);
+    }
   }
 }
