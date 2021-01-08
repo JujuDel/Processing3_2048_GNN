@@ -17,7 +17,6 @@ void setup() {
   background(255);
   textSize(30);
   fill(255, 0, 0);
-  text("Press 'r' to reset game", 150, 560);
 
   DIRECTION[0] = "UP";
   DIRECTION[1] = "RIGHT";
@@ -29,7 +28,7 @@ void setup() {
   hiddens[0] = 16 * 5;
 
   population = new Population(100);
-  population.respond();
+  population.blank();
 }
 
 void draw() {

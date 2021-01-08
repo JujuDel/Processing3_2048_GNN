@@ -19,4 +19,11 @@ class Population {
     }
     NNs[0].display(NNs[0].findIndexBestOutput());
   }
+
+  void blank() {
+    for (int i = 0; i < NNs.length; i++) {
+      NNs[i].blank();
+    }
+    NNs[0].display();
+  }
 }
