@@ -58,8 +58,8 @@ void draw() {
     {
       // Perform the mutation
       population.mutate();
-      // TEMPORARY: start over
-      setup();
+      // Reset the grids
+      population.resetGrids();
     }
     else
     {

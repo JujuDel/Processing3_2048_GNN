@@ -21,6 +21,16 @@ class Population {
     }
   }
 
+  void resetGrids() {
+    grids = new Grid[_SIZE_POPULATION];
+    isAlive = new boolean[_SIZE_POPULATION];
+
+    for (int i = 0; i < NNs.length; i++) {
+      grids[i] = new Grid(i);
+      isAlive[i] = true;
+    }
+  }
+
   void update() {
     for (int i = 0; i < NNs.length; i++) {
       if (isAlive[i]) {
@@ -96,6 +106,10 @@ class Population {
           }
         }
       }
+
+      // TEMPORARY: Next random
+      newNNs[i] = new MyDFF(16, hiddens, 4);
+      newNNs[i + 1] = new MyDFF(16, hiddens, 4);
     }
 
     // Resulting NNs
