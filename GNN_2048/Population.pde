@@ -72,6 +72,7 @@ class Population {
     float cumSum = 0;
     for (int i = grids.length - 1; i >= 0; i--) {
       grids[i].fitness = cumSum + grids[i].score / fitnessSum;
+      cumSum = grids[i].fitness;
     }
 
     // Next generation array
