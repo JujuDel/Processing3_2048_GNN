@@ -1,13 +1,13 @@
+int _SIZE_POPULATION = 100;
+double _ELITISM_RATIO = 0.1;
+double _MUTATION_RATE = 0.2;
+int _ELITISM_IDX = (int)(_ELITISM_RATIO * _SIZE_POPULATION);
+
 class Population {
   MyDFF[] NNs;
   Grid[] grids;
   boolean[] isAlive;
   int gen = 0;
-  
-  int _SIZE_POPULATION = 100;
-  double _ELITISM_RATIO = 0.1;
-  double _MUTATION_RATE = 0.2;
-  int _ELITISM_IDX = (int)(_ELITISM_RATIO * _SIZE_POPULATION);
 
   Population() {
     NNs = new MyDFF[_SIZE_POPULATION];
@@ -88,7 +88,7 @@ class Population {
       int idxParent1 = _SIZE_POPULATION;
       while (idxParent1 == _SIZE_POPULATION) {
         idxParent1 = 1;
-        float choice1 = random(999999) / 999999;
+        double choice1 = random(1);
         for (; idxParent1 < _SIZE_POPULATION; ++idxParent1) {
           if (grids[idxParent1].fitness < choice1) {
             idxParent1--;
@@ -99,7 +99,7 @@ class Population {
       int idxParent2 = _SIZE_POPULATION;
       while (idxParent2 == idxParent1 || idxParent2 == _SIZE_POPULATION) {
         idxParent2 = 1;
-        float choice2 = random(999999) / 999999;
+        double choice2 = random(1);
         for (; idxParent2 < _SIZE_POPULATION; ++idxParent2) {
           if (grids[idxParent2].fitness < choice2) {
             idxParent2--;
@@ -108,12 +108,54 @@ class Population {
         }
       }
 
-      // TEMPORARY: Next random
-      newNNs[i] = new MyDFF(16, hiddens, 4);
-      newNNs[i + 1] = new MyDFF(16, hiddens, 4);
+      // Create two children
+      newNNs[i] = giveBirth(NNs[idxParent1], NNs[idxParent2]);
+      newNNs[i + 1] = giveBirth(NNs[idxParent2], NNs[idxParent1]);
     }
 
     // Resulting NNs
     NNs = newNNs.clone();
+    gen++;
   }
+}
+
+MyDFF giveBirth(MyDFF father, MyDFF mother) {
+  // Input / Hiddens / Output sizes
+  int input = father._network.m_input_layer.neurons.length;
+  int hiddens[] = new int[father._network.m_hidden_layer.length];
+  for (int i = 0; i < hiddens.length; i++) {
+    hiddens[i] = father._network.m_hidden_layer[i].neurons.length;
+  }
+  int output = father._network.m_output_layer.neurons.length;
+
+  // Child initialization
+  MyDFF child = new MyDFF(input, hiddens, output);
+
+  // Weighted random average on all weights / biases
+  for (int l = 0; l < child._network.m_hidden_layer.length; ++l) {
+    for (int n = 0; n < child._network.m_hidden_layer[l].neurons.length; ++n) {
+      double r = random(1);
+      if (r > _MUTATION_RATE) {
+        r = random(1);
+        child._network.m_hidden_layer[l].neurons[n].m_bias = r * father._network.m_hidden_layer[l].neurons[n].m_bias + (1 - r) * mother._network.m_hidden_layer[l].neurons[n].m_bias;
+        for (int w = 0; w < child._network.m_hidden_layer[l].neurons[n].m_weights.length; ++w) {
+          r = random(1);
+          child._network.m_hidden_layer[l].neurons[n].m_weights[w] = r * father._network.m_hidden_layer[l].neurons[n].m_weights[w] + (1 - r) * mother._network.m_hidden_layer[l].neurons[n].m_weights[w];
+        }
+      }
+    }
+  }
+  for (int n = 0; n < child._network.m_output_layer.neurons.length; ++n) {
+    double r = random(1);
+    if (r > _MUTATION_RATE) {
+        r = random(1);
+      child._network.m_output_layer.neurons[n].m_bias = r * father._network.m_output_layer.neurons[n].m_bias + (1 - r) * mother._network.m_output_layer.neurons[n].m_bias;
+      for (int w = 0; w < child._network.m_output_layer.neurons[n].m_weights.length; ++w) {
+        r = random(1);
+        child._network.m_output_layer.neurons[n].m_weights[w] = r * father._network.m_output_layer.neurons[n].m_weights[w] + (1 - r) * mother._network.m_output_layer.neurons[n].m_weights[w];
+      }
+    }
+  }
+
+  return child;
 }

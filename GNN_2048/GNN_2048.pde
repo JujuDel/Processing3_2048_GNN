@@ -1,3 +1,5 @@
+import processing.serial.*;
+
 // 2048 container
 int startCoor = 100;
 int endCoor = 700;
@@ -28,7 +30,7 @@ void setup() {
 
   // Set the number of hidden layers and the number of neurons per layers
   hiddens = new int[1];
-  hiddens[0] = 16 * 5;
+  hiddens[0] = 16 * 3;
 
   population = new Population();
   population.blank();
@@ -50,6 +52,11 @@ void redrawGrid() {
   fill(0);
   textSize(25);
   text("Score: " + population.grids[0].score, 350, 45);
+
+  if (isGeneticOngoing) {
+    textSize(25);
+    text("Gen: " + population.gen, 760, 45);
+  }
 }
 
 void draw() {
@@ -57,6 +64,8 @@ void draw() {
 
   // Genetic algorithm
   if (isGeneticOngoing) {
+    delay(10);
+
     // All the NN are finished
     if (population.allNNStoped())
     {
@@ -80,12 +89,13 @@ void draw() {
       population.grids[0].moveTilesKeyboard();
     }
   }
-  population.NNs[0].display(population.NNs[0].findIndexBestOutput());
 
   // Draws the cells that have a numeric value
   for (Cell c : population.grids[0].getOccupiedCells (true)) {
     c.drawTile();
   }
+
+  population.NNs[0].display(population.NNs[0].findIndexBestOutput());
 }
 
 void keyPressed() {
@@ -105,5 +115,6 @@ void keyPressed() {
   // 'SPACE BAR' -> Starts or stops the genetic
   else if (key == ' ') {
     isGeneticOngoing = !isGeneticOngoing;
+    population.gen = 0;
   }
 }

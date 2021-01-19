@@ -1,7 +1,6 @@
 double sigmoid(double x) { return 1.0 / (1.0 + exp(-1.0 * (float)x)); }
 
 class MyDFF {
-  
   Network _network;
   
   MyDFF(int nbInputs, int[] nbHiddens, int nbOutput) {
@@ -51,6 +50,7 @@ class MyDFF {
   }
 
   void display(int res) {
+    _network.weights();
     strokeWeight(2);
     _network.display(res);
   }

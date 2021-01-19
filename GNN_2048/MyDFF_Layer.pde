@@ -57,8 +57,8 @@ class Layer {
     for (int i = 0; i < neurons.length; ++i) {
       pushMatrix();
         translate(
-          (i/nbNeuronsPerCol) * (sizeNeuron + 2) + xStart,
-          (i%nbNeuronsPerCol) * (sizeNeuron + 2) + yStart);
+          (i/nbNeuronsPerCol) * (sizeNeuron + 30) + xStart,
+          (i%nbNeuronsPerCol) * (sizeNeuron + 30) + yStart);
         neurons[i].display(sizeNeuron);
       popMatrix();
     }
@@ -72,7 +72,7 @@ class Layer {
       pushMatrix();
         translate(
           xStart,
-          i * (sizeNeuron + 2) + yStart);
+          i * (sizeNeuron + 20) + yStart);
         neurons[i].display(sizeNeuron);
 
         if (i == res)
